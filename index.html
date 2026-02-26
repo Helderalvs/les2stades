@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Les Deux Stades — Brasserie Paris 16</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:      #b8860b;
+      --gold2:     #d4a017;
+      --gold-light:#fef3c7;
+      --gold-pale: #fffbeb;
+      --red:       #b91c1c;
+      --red-light: #fee2e2;
+      --bg:        #fafaf8;
+      --bg2:       #ffffff;
+      --bg3:       #f5f3ee;
+      --text:      #1c1917;
+      --text2:     #44403c;
+      --muted:     #78716c;
+      --border:    #e7e5e4;
+      --r:         14px;
+      --shadow:    0 2px 16px rgba(0,0,0,0.07);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.1);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Inter',system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      line-height:1.6;
+    }
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:#f5f3ee; }
+    ::-webkit-scrollbar-thumb { background:var(--gold2); border-radius:3px; }
+
+    /* ══ NAV ══ */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:500;
+      background:rgba(255,255,255,0.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 1px 12px rgba(0,0,0,0.06);
+    }
+    .nav-inner {
+      max-width:1160px; margin:0 auto; padding:0 32px;
+      height:68px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .nav-logo {
+      font-family:'Playfair Display',serif;
+      font-size:1.2rem; font-weight:700;
+      color:var(--gold); letter-spacing:0.5px;
+      display:flex; flex-direction:column; line-height:1.15;
+    }
+    .nav-logo span {
+      font-size:0.58rem; letter-spacing:3px; text-transform:uppercase;
+      color:var(--muted); font-family:'Inter',sans-serif; font-weight:600;
+    }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a {
+      color:var(--muted); text-decoration:none;
+      font-size:0.85rem; font-weight:600; transition:color 0.2s;
+    }
+    .nav-links a:hover { color:var(--gold); }
+    .nav-cta {
+      background:var(--gold);
+      color:#fff; padding:9px 22px; border-radius:50px;
+      text-decoration:none; font-weight:700; font-size:0.8rem; letter-spacing:0.5px;
+      transition:all 0.3s; box-shadow:0 4px 16px rgba(184,134,11,0.3);
+    }
+    .nav-cta:hover { background:var(--gold2); transform:translateY(-1px); box-shadow:0 6px 24px rgba(184,134,11,0.4); }
+
+    /* ══ HERO ══ */
+    #hero {
+      min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center;
+      padding:110px 24px 80px;
+      position:relative; overflow:hidden;
+      background:linear-gradient(160deg, #fffbf0 0%, #fef3c7 45%, #fde68a 100%);
+    }
+    .hero-blob {
+      position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none;
+    }
+    .hb1 { width:600px; height:400px; background:rgba(184,134,11,0.12); top:-100px; left:-100px; animation:hbf 12s ease-in-out infinite; }
+    .hb2 { width:500px; height:350px; background:rgba(185,28,28,0.07); bottom:-80px; right:-80px; animation:hbf 14s ease-in-out infinite reverse; }
+    @keyframes hbf {
+      0%,100% { transform:translate(0,0) scale(1); }
+      50% { transform:translate(30px,-20px) scale(1.05); }
+    }
+    .hero-content { position:relative; z-index:1; max-width:780px; }
+    .hero-rating {
+      display:inline-flex; align-items:center; gap:10px;
+      background:white; border:1.5px solid #fde68a;
+      border-radius:50px; padding:8px 20px; margin-bottom:22px;
+      box-shadow:0 2px 16px rgba(184,134,11,0.12);
+    }
+    .stars { color:#d97706; font-size:1rem; letter-spacing:2px; }
+    .rating-txt { font-size:0.8rem; color:var(--muted); font-weight:600; }
+    .hero-eyebrow {
+      display:inline-flex; align-items:center; gap:10px;
+      color:var(--gold); font-size:0.72rem; font-weight:700;
+      letter-spacing:4px; text-transform:uppercase; margin-bottom:20px;
+    }
+    .hero-eyebrow::before,.hero-eyebrow::after { content:''; display:block; width:24px; height:1.5px; background:var(--gold); }
+    .hero-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(3rem,9vw,6rem);
+      font-weight:900; line-height:0.95; letter-spacing:-2px; margin-bottom:22px;
+    }
+    .hero-title .l1 { display:block; color:var(--text); }
+    .hero-title .l2 { display:block; color:var(--gold); }
+    .hero-sub {
+      color:var(--text2); font-size:clamp(0.95rem,2vw,1.1rem);
+      max-width:560px; margin:0 auto 40px; line-height:1.8;
+    }
+    .hero-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    .btn-gold {
+      background:var(--gold); color:white;
+      padding:14px 36px; border-radius:50px;
+      text-decoration:none; font-weight:700; font-size:0.9rem;
+      transition:all 0.3s; box-shadow:0 4px 24px rgba(184,134,11,0.35);
+    }
+    .btn-gold:hover { background:var(--gold2); transform:translateY(-3px); box-shadow:0 8px 40px rgba(184,134,11,0.45); }
+    .btn-out {
+      background:white; color:var(--gold);
+      padding:14px 36px; border-radius:50px;
+      text-decoration:none; font-weight:700; font-size:0.9rem;
+      border:2px solid #fde68a; transition:all 0.3s;
+    }
+    .btn-out:hover { border-color:var(--gold); background:var(--gold-pale); transform:translateY(-3px); }
+    .hero-bar {
+      display:flex; gap:32px; justify-content:center; flex-wrap:wrap;
+      margin-top:52px; padding-top:40px; border-top:1px solid rgba(184,134,11,0.15);
+    }
+    .hero-bar-item { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:0.875rem; font-weight:500; }
+
+    /* ══ SECTIONS ══ */
+    section { padding:96px 24px; }
+    .container { max-width:1160px; margin:0 auto; }
+    .eyebrow {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--gold-light); color:var(--gold);
+      font-size:0.7rem; font-weight:700; letter-spacing:3px;
+      text-transform:uppercase; padding:5px 14px; border-radius:50px;
+      margin-bottom:14px;
+    }
+    .sec-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2rem,5vw,3rem); font-weight:700;
+      color:var(--text); letter-spacing:-0.5px; line-height:1.1;
+    }
+    .sec-title em { font-style:italic; color:var(--gold); }
+    .gold-line { width:52px; height:3px; background:linear-gradient(90deg,var(--gold),transparent); border-radius:3px; margin-top:14px; }
+    .sh { margin-bottom:60px; }
+
+    /* ══ ABOUT ══ */
+    #about { background:white; }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
+    .about-text { color:var(--text2); font-size:1rem; line-height:1.95; }
+    .about-text p { margin-bottom:18px; }
+    .about-text strong { color:var(--text); font-weight:700; }
+    .highlights { display:flex; flex-direction:column; gap:12px; margin-top:24px; }
+    .hl {
+      display:flex; align-items:center; gap:14px;
+      padding:12px 16px; border-radius:12px;
+      background:var(--gold-pale); border:1px solid #fde68a;
+      font-size:0.875rem; font-weight:600; color:var(--text2);
+      transition:all 0.2s;
+    }
+    .hl:hover { border-color:var(--gold); transform:translateX(4px); }
+    .hl-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+    .about-visual {
+      border-radius:20px;
+      aspect-ratio:4/3;
+      box-shadow:var(--shadow-lg);
+      position:relative; overflow:hidden;
+      background:#1a0f00;
+      border:2px solid #fde68a;
+    }
+    .about-visual .real-photo {
+      width:100%; height:100%;
+      object-fit:cover;
+      object-position:72% 18%;
+      display:block;
+    }
+    .about-visual .bar-bg {
+      position:absolute; inset:0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 60px),
+        repeating-linear-gradient(0deg,  rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 60px);
+    }
+    /* lumières chaudes de bar */
+    .about-visual .bar-light {
+      position:absolute; border-radius:50%; filter:blur(50px); pointer-events:none;
+    }
+    .about-visual .bl1 { width:280px;height:200px; background:rgba(251,191,36,0.35); top:-40px; left:-40px; }
+    .about-visual .bl2 { width:220px;height:180px; background:rgba(185,28,28,0.25); bottom:-30px; right:-30px; }
+    .about-visual .bl3 { width:180px;height:140px; background:rgba(234,88,12,0.2); top:40%; left:40%; }
+    .about-visual .bar-content {
+      position:relative; z-index:1; width:100%; height:100%;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:0; padding:28px;
+    }
+    /* comptoir du bar en bas */
+    .bar-counter {
+      width:100%; background:linear-gradient(to bottom, #3d2b0f, #2a1c08);
+      border-top:3px solid #8b6914; border-radius:0 0 20px 20px;
+      padding:16px 24px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:absolute; bottom:0; left:0; right:0;
+    }
+    .bar-counter-item { display:flex; flex-direction:column; align-items:center; gap:3px; }
+    .bar-counter-ico { font-size:1.6rem; }
+    .bar-counter-lbl { font-size:0.62rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#d4a017; }
+    /* éléments flottants */
+    .bar-floating {
+      display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-bottom:70px;
+    }
+    .bar-item {
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+      border-radius:14px; padding:16px 18px;
+      backdrop-filter:blur(8px);
+      transition:transform 0.3s;
+    }
+    .bar-item:hover { transform:translateY(-4px); }
+    .bar-item-ico { font-size:2rem; }
+    .bar-item-txt { font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.7); letter-spacing:1px; text-transform:uppercase; }
+    .bar-tagline {
+      position:absolute; top:20px; left:50%; transform:translateX(-50%);
+      white-space:nowrap;
+      font-family:'Playfair Display',serif;
+      font-size:1rem; font-style:italic; font-weight:700;
+      color:rgba(255,255,255,0.9);
+      background:rgba(0,0,0,0.3); backdrop-filter:blur(8px);
+      border:1px solid rgba(212,168,83,0.3);
+      padding:7px 18px; border-radius:50px;
+    }
+    .av-icon { font-size:4rem; position:relative; z-index:1; }
+    .av-caption { font-family:'Playfair Display',serif; color:var(--gold); font-size:1.1rem; font-style:italic; z-index:1; }
+
+    /* ══ MENU ══ */
+    #menu { background:var(--bg3); }
+    .formulas { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:36px; }
+    .formula {
+      background:white; border:1.5px solid #fde68a; border-radius:var(--r);
+      padding:24px 28px; display:flex; justify-content:space-between; align-items:center;
+      box-shadow:var(--shadow); transition:all 0.3s;
+    }
+    .formula:hover { border-color:var(--gold); transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+    .formula-name { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--text); }
+    .formula-desc { color:var(--muted); font-size:0.82rem; margin-top:4px; }
+    .formula-price { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--gold); white-space:nowrap; }
+    .menu-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px; }
+    .menu-tab {
+      background:white; border:1.5px solid var(--border);
+      color:var(--muted); padding:9px 22px; border-radius:50px;
+      font-size:0.82rem; font-weight:600; cursor:pointer;
+      transition:all 0.25s;
+    }
+    .menu-tab.active,.menu-tab:hover {
+      background:var(--gold-light); color:var(--gold);
+      border-color:#fde68a; box-shadow:0 2px 12px rgba(184,134,11,0.15);
+    }
+    .menu-section { display:none; }
+    .menu-section.active { display:block; }
+    .menu-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
+    .menu-card {
+      background:white; border:1.5px solid var(--border); border-radius:var(--r);
+      padding:22px; display:flex; justify-content:space-between; align-items:flex-start;
+      gap:16px; box-shadow:var(--shadow); transition:all 0.3s;
+    }
+    .menu-card:hover { border-color:#fde68a; transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+    .mc-name { font-weight:700; font-size:0.95rem; margin-bottom:5px; color:var(--text); }
+    .mc-desc { color:var(--muted); font-size:0.8rem; line-height:1.6; }
+    .mc-badge {
+      display:inline-block; margin-top:8px;
+      background:var(--red-light); color:var(--red);
+      border:1px solid #fecaca; padding:3px 9px;
+      border-radius:50px; font-size:0.68rem; font-weight:700;
+    }
+    .mc-price { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--gold); white-space:nowrap; }
+
+    /* ══ AMBIANCE ══ */
+    #ambiance { background:white; }
+    .amb-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .amb-card {
+      background:var(--bg3); border:1.5px solid var(--border); border-radius:var(--r);
+      padding:36px 24px; text-align:center; transition:all 0.35s;
+    }
+    .amb-card:hover { border-color:#fde68a; transform:translateY(-5px); box-shadow:var(--shadow-lg); background:var(--gold-pale); }
+    .amb-ico { font-size:2.5rem; display:block; margin-bottom:16px; }
+    .amb-t { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:10px; }
+    .amb-d { color:var(--muted); font-size:0.875rem; line-height:1.7; }
+
+    /* ══ AVIS ══ */
+    #avis { background:var(--bg3); }
+    .avis-top-row {
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:24px; margin-bottom:56px;
+    }
+    .score-box {
+      display:flex; align-items:center; gap:18px;
+      background:white; border:1.5px solid #fde68a; border-radius:var(--r);
+      padding:22px 30px; box-shadow:var(--shadow);
+    }
+    .score-n { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:700; color:var(--gold); line-height:1; }
+    .score-s { color:#d97706; font-size:1.2rem; letter-spacing:2px; }
+    .score-sub { color:var(--muted); font-size:0.78rem; margin-top:4px; }
+    .avis-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; }
+    .avis-card {
+      background:white; border:1.5px solid var(--border); border-radius:var(--r);
+      padding:24px; box-shadow:var(--shadow); transition:all 0.3s;
+    }
+    .avis-card:hover { border-color:#fde68a; transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+    .avis-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+    .av-name { font-weight:700; font-size:0.9rem; color:var(--text); }
+    .av-src { font-size:0.7rem; color:var(--muted); margin-top:2px; }
+    .av-note { color:#d97706; font-size:0.9rem; letter-spacing:1px; }
+    .av-txt { color:var(--text2); font-size:0.875rem; line-height:1.75; }
+    .av-date { font-size:0.7rem; color:var(--muted); margin-top:10px; }
+    .av-tag {
+      display:inline-block; margin-top:10px;
+      background:var(--gold-light); color:var(--gold);
+      border:1px solid #fde68a; padding:3px 10px;
+      border-radius:50px; font-size:0.68rem; font-weight:700;
+    }
+
+    /* ══ INFOS ══ */
+    #infos { background:white; }
+    .infos-grid { display:grid; grid-template-columns:1fr 1fr; gap:56px; }
+    .info-block { margin-bottom:36px; }
+    .info-block-title {
+      font-family:'Playfair Display',serif;
+      font-size:1.05rem; font-weight:700; color:var(--gold);
+      margin-bottom:16px; padding-bottom:12px;
+      border-bottom:1.5px solid #fde68a;
+    }
+    .info-row {
+      display:flex; align-items:flex-start; gap:14px;
+      padding:10px 0; border-bottom:1px solid var(--border); font-size:0.875rem;
+    }
+    .info-row:last-child { border-bottom:none; }
+    .i-ico { font-size:1.05rem; flex-shrink:0; margin-top:1px; }
+    .i-lbl { color:var(--muted); font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; }
+    .i-val { color:var(--text); font-weight:600; }
+    .open-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:#d1fae5; color:#065f46;
+      border:1px solid #a7f3d0; padding:5px 14px;
+      border-radius:50px; font-size:0.72rem; font-weight:700; margin-bottom:18px;
+    }
+    .open-dot { width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 6px #10b981; animation:ping 2s infinite; }
+    @keyframes ping { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(0.7);opacity:0.5;} }
+    .hours-list { display:flex; flex-direction:column; }
+    .h-row {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:11px 0; border-bottom:1px solid var(--border); font-size:0.875rem;
+    }
+    .h-row:last-child { border-bottom:none; }
+    .h-day { color:var(--text2); font-weight:600; }
+    .h-open { color:var(--text); font-weight:700; background:var(--gold-light); padding:3px 10px; border-radius:50px; font-size:0.82rem; }
+    .h-closed { color:var(--muted); font-weight:600; text-decoration:line-through; font-size:0.82rem; }
+    .note-box {
+      margin-top:14px; background:#fef9c3; border:1px solid #fde68a;
+      border-radius:10px; padding:12px 16px;
+      font-size:0.78rem; color:#854d0e; line-height:1.6;
+    }
+    .services { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+    .srv {
+      display:flex; align-items:center; gap:10px;
+      background:var(--bg3); border:1.5px solid var(--border); border-radius:10px;
+      padding:11px 14px; font-size:0.82rem; color:var(--text2); font-weight:500;
+      transition:all 0.2s;
+    }
+    .srv:hover { border-color:#fde68a; background:var(--gold-pale); }
+    .map-box {
+      background:var(--bg3); border:1.5px solid var(--border); border-radius:var(--r);
+      aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:14px; margin-top:24px; position:relative; overflow:hidden;
+    }
+    .map-box::before {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(0deg,rgba(184,134,11,0.04) 0,rgba(184,134,11,0.04) 1px,transparent 1px,transparent 28px),
+                 repeating-linear-gradient(90deg,rgba(184,134,11,0.04) 0,rgba(184,134,11,0.04) 1px,transparent 1px,transparent 28px);
+    }
+    .map-inner { position:relative; z-index:1; text-align:center; }
+    .map-pin { font-size:2.8rem; display:block; margin-bottom:10px; }
+    .map-addr { font-family:'Playfair Display',serif; color:var(--gold); font-size:1rem; font-weight:700; }
+    .map-sub { color:var(--muted); font-size:0.8rem; margin-top:4px; }
+    .map-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--gold); color:white; padding:10px 22px;
+      border-radius:50px; text-decoration:none; font-weight:700;
+      font-size:0.8rem; margin-top:14px; transition:all 0.3s;
+    }
+    .map-btn:hover { background:var(--gold2); transform:translateY(-2px); box-shadow:0 6px 24px rgba(184,134,11,0.3); }
+
+    /* ══ CTA ══ */
+    #cta {
+      background:linear-gradient(135deg,#78350f,#92400e);
+      padding:80px 24px; text-align:center;
+      position:relative; overflow:hidden;
+    }
+    #cta::before {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.02) 0,rgba(255,255,255,0.02) 1px,transparent 1px,transparent 32px);
+    }
+    #cta h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; color:white; margin-bottom:14px; position:relative; z-index:1; }
+    #cta p { color:rgba(255,255,255,0.7); font-size:1rem; margin-bottom:36px; max-width:460px; margin-left:auto; margin-right:auto; line-height:1.7; position:relative; z-index:1; }
+    .cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+    .btn-white {
+      background:white; color:#78350f; padding:14px 36px; border-radius:50px;
+      text-decoration:none; font-weight:700; font-size:0.9rem; transition:all 0.3s;
+      box-shadow:0 4px 24px rgba(0,0,0,0.2);
+    }
+    .btn-white:hover { transform:translateY(-3px); box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .btn-ghost-w {
+      background:transparent; color:white; padding:14px 36px; border-radius:50px;
+      text-decoration:none; font-weight:700; font-size:0.9rem;
+      border:2px solid rgba(255,255,255,0.4); transition:all 0.3s;
+    }
+    .btn-ghost-w:hover { background:rgba(255,255,255,0.1); border-color:white; transform:translateY(-3px); }
+
+    /* ══ FOOTER ══ */
+    footer {
+      background:var(--text); padding:52px 24px 28px;
+    }
+    .footer-grid {
+      max-width:1160px; margin:0 auto;
+      display:grid; grid-template-columns:1fr 1fr 1fr; gap:44px;
+      padding-bottom:36px; border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .f-logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--gold2); margin-bottom:10px; }
+    .f-sub { color:rgba(255,255,255,0.45); font-size:0.82rem; line-height:1.7; }
+    .f-col-title { color:var(--gold2); font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; }
+    .f-links { display:flex; flex-direction:column; gap:8px; }
+    .f-links a { color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
+    .f-links a:hover { color:var(--gold2); }
+    .f-contact { display:flex; flex-direction:column; gap:10px; }
+    .f-ci { display:flex; align-items:center; gap:10px; color:rgba(255,255,255,0.5); font-size:0.85rem; }
+    .footer-bot { max-width:1160px; margin:0 auto; padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .f-copy { color:rgba(255,255,255,0.25); font-size:0.75rem; }
+    .f-badges { display:flex; gap:8px; }
+    .f-badge { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:4px 12px; border-radius:50px; font-size:0.68rem; font-weight:600; }
+
+    /* ══ ANIMATIONS ══ */
+    .fade-up { opacity:0; transform:translateY(26px); transition:opacity 0.65s ease, transform 0.65s ease; }
+    .fade-up.visible { opacity:1; transform:translateY(0); }
+    .fade-up:nth-child(2){transition-delay:.1s;}
+    .fade-up:nth-child(3){transition-delay:.2s;}
+    .fade-up:nth-child(4){transition-delay:.3s;}
+    .fade-up:nth-child(5){transition-delay:.4s;}
+    .fade-up:nth-child(6){transition-delay:.5s;}
+
+    /* ══ RESPONSIVE ══ */
+    @media(max-width:768px){
+      .nav-links { display:none; }
+      .about-grid,.infos-grid,.footer-grid { grid-template-columns:1fr; gap:32px; }
+      .amb-grid { grid-template-columns:1fr; }
+      .formulas { grid-template-columns:1fr; }
+      section { padding:70px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      Les Deux Stades
+      <span>Brasserie · Paris 16e</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">Le restaurant</a></li>
+      <li><a href="#menu">La carte</a></li>
+      <li><a href="#ambiance">Ambiance</a></li>
+      <li><a href="#avis">Avis</a></li>
+      <li><a href="#infos">Infos</a></li>
+    </ul>
+    <a href="tel:+33147431235" class="nav-cta">📞 Appeler</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-blob hb1"></div>
+  <div class="hero-blob hb2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Brasserie &amp; Bar · Paris 16e</div>
+    <h1 class="hero-title">
+      <span class="l1">Les Deux</span>
+      <span class="l2">Stades</span>
+    </h1>
+    <p class="hero-sub">L'unique brasserie entre le Parc des Princes et le Stade Jean-Bouin. Terrasse, cuisine maison et ambiance matchday inoubliable depuis 1974.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-gold">Voir la carte</a>
+      <a href="#infos" class="btn-out">Accès &amp; Horaires</a>
+    </div>
+    <div class="hero-bar">
+      <div class="hero-bar-item"><span>📍</span><span>41 Av. du Général Sarrail, 75016 Paris</span></div>
+      <div class="hero-bar-item"><span>🕐</span><span>Lun–Ven 06h30–19h00 · Week-end fermé</span></div>
+      <div class="hero-bar-item"><span>💶</span><span>15 – 30 € / personne</span></div>
+      <div class="hero-bar-item"><span>🐕</span><span>Chiens acceptés</span></div>
+      <div class="hero-bar-item"><span>☀️</span><span>Grande terrasse</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="sh fade-up">
+      <span class="eyebrow">Notre histoire</span>
+      <h2 class="sec-title">Le restaurant qui vit <em>au rythme du sport</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="fade-up">
+        <div class="about-text">
+          <p>Depuis <strong>1974</strong>, Les Deux Stades occupe une place de choix dans le Paris sportif : idéalement situé à deux pas du <strong>Parc des Princes</strong> et du <strong>Stade Jean-Bouin</strong>, c'est le rendez-vous incontournable avant et après chaque match.</p>
+          <p>Notre brasserie vous accueille dans une <strong>atmosphère chaleureuse et conviviale</strong> pour déguster une cuisine généreuse, des frites maison croustillantes et des boissons fraîches servies avec le sourire.</p>
+          <p>Les jours de match, l'ambiance monte d'un cran : les supporters se retrouvent sur notre <strong>grande terrasse</strong> pour vivre la passion du football ensemble.</p>
+        </div>
+        <div class="highlights">
+          <div class="hl"><div class="hl-dot"></div><span>Établissement fondé en 1974 — plus de 50 ans d'histoire</span></div>
+          <div class="hl"><div class="hl-dot"></div><span>Seul bar-restaurant entre les deux stades parisiens</span></div>
+          <div class="hl"><div class="hl-dot"></div><span>Terrasse ensoleillée sur l'avenue du Général Sarrail</span></div>
+          <div class="hl"><div class="hl-dot"></div><span>Personnel accueillant même en heure de pointe</span></div>
+        </div>
+      </div>
+      <div class="fade-up">
+        <div class="about-visual">
+          <img class="real-photo" src="rc5f-design-Les-Deux-Stades-2025-10.jpg" alt="Les Deux Stades — Terrasse Paris 16e"/>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(0,0,0,0) 0%,transparent 100%);pointer-events:none;"></div>
+          <div style="position:absolute;bottom:14px;left:16px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);border:1px solid rgba(212,168,83,0.4);border-radius:50px;padding:6px 16px;font-family:'Playfair Display',serif;font-style:italic;font-size:0.85rem;color:#fde68a;">🏟️ La brasserie des supporters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="container">
+    <div class="sh fade-up">
+      <span class="eyebrow">La carte</span>
+      <h2 class="sec-title">Une cuisine <em>généreuse et savoureuse</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="formulas fade-up">
+      <div class="formula">
+        <div>
+          <div class="formula-name">🍽️ Formule Déjeuner</div>
+          <div class="formula-desc">Entrée + Plat ou Plat + Dessert</div>
+        </div>
+        <div class="formula-price">11 €</div>
+      </div>
+      <div class="formula">
+        <div>
+          <div class="formula-name">🍽️ Formule Complète</div>
+          <div class="formula-desc">Entrée + Plat + Dessert</div>
+        </div>
+        <div class="formula-price">14 €</div>
+      </div>
+    </div>
+    <div class="menu-tabs fade-up">
+      <div class="menu-tab active" onclick="showMenu('entrees',this)">🥗 Entrées</div>
+      <div class="menu-tab" onclick="showMenu('plats',this)">🍽️ Plats</div>
+      <div class="menu-tab" onclick="showMenu('desserts',this)">🍮 Desserts</div>
+      <div class="menu-tab" onclick="showMenu('boissons',this)">🍺 Boissons</div>
+    </div>
+    <div id="entrees" class="menu-section active fade-up">
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Salade verte</div><div class="mc-desc">Salade fraîche de saison, vinaigrette maison</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Soupe du jour</div><div class="mc-desc">Préparation maison selon arrivage du marché</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Œuf mayonnaise</div><div class="mc-desc">Œufs frais, mayonnaise artisanale</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Charcuterie du moment</div><div class="mc-desc">Sélection du jour, pain frais<br><span class="mc-badge">🌟 Recommandé</span></div></div><div class="mc-price">9 €</div></div>
+      </div>
+    </div>
+    <div id="plats" class="menu-section fade-up">
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Steak frites</div><div class="mc-desc">Pièce de bœuf grillée, frites maison croustillantes<br><span class="mc-badge">⭐ Best-seller</span></div></div><div class="mc-price">16 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Croque-monsieur</div><div class="mc-desc">Pain de mie, jambon, fromage fondu, béchamel</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Burger maison</div><div class="mc-desc">Pain artisanal, steak haché, cheddar, salade, tomate</div></div><div class="mc-price">14 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Plat du jour</div><div class="mc-desc">Selon arrivage — à demander au serveur</div></div><div class="mc-price">13 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Omelette garnie</div><div class="mc-desc">Jambon, fromage ou champignons, frites</div></div><div class="mc-price">11 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Sandwich baguette</div><div class="mc-desc">Garniture au choix, pain frais du jour</div></div><div class="mc-price">8 €</div></div>
+      </div>
+    </div>
+    <div id="desserts" class="menu-section fade-up">
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Tarte du jour</div><div class="mc-desc">Pâtisserie maison selon saison</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Crème brûlée</div><div class="mc-desc">Classique français, caramel croustillant<br><span class="mc-badge">🌟 Recommandé</span></div></div><div class="mc-price">8 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Mousse au chocolat</div><div class="mc-desc">Chocolat noir, légère et onctueuse</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Glace / Sorbet</div><div class="mc-desc">2 boules au choix</div></div><div class="mc-price">6 €</div></div>
+      </div>
+    </div>
+    <div id="boissons" class="menu-section fade-up">
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Pression (25 cl)</div><div class="mc-desc">Bière blonde pression fraîche</div></div><div class="mc-price">4 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Soft / Coca-Cola</div><div class="mc-desc">Boissons fraîches</div></div><div class="mc-price">4 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Café / Expresso</div><div class="mc-desc">Serré ou allongé</div></div><div class="mc-price">2 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Verre de vin</div><div class="mc-desc">Rouge, blanc ou rosé — sélection du maison</div></div><div class="mc-price">5 €</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMBIANCE -->
+<section id="ambiance">
+  <div class="container">
+    <div class="sh fade-up">
+      <span class="eyebrow">Ambiance &amp; Services</span>
+      <h2 class="sec-title">Plus qu'un restaurant, <em>une expérience</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="amb-grid">
+      <div class="amb-card fade-up"><span class="amb-ico">⚽</span><div class="amb-t">Ambiance Matchday</div><div class="amb-d">Les jours de match au Parc des Princes ou au Stade Jean-Bouin, l'atmosphère est électrique. Retrouvez les supporters et vivez le foot en direct.</div></div>
+      <div class="amb-card fade-up"><span class="amb-ico">☀️</span><div class="amb-t">Grande Terrasse</div><div class="amb-d">Profitez de notre terrasse ensoleillée sur l'avenue du Général Sarrail. Idéale pour déjeuner ou prendre un verre en plein air avec vos proches.</div></div>
+      <div class="amb-card fade-up"><span class="amb-ico">🐕</span><div class="amb-t">Chiens Acceptés</div><div class="amb-d">Vos compagnons à quatre pattes sont les bienvenus ! Une brasserie familiale et ouverte à tous, dans une ambiance décontractée et chaleureuse.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AVIS -->
+<section id="avis">
+  <div class="container">
+    <div class="avis-top-row fade-up">
+      <div>
+        <span class="eyebrow">Ce que disent nos clients</span>
+        <h2 class="sec-title">Les <em>avis</em></h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="score-box">
+        <div class="score-n">4,0</div>
+        <div>
+          <div class="score-s">★★★★☆</div>
+          <div class="score-sub">453 avis Google</div>
+        </div>
+      </div>
+    </div>
+    <div class="avis-grid">
+      <div class="avis-card fade-up">
+        <div class="avis-head"><div><div class="av-name">Leonardo Collino</div><div class="av-src">Google</div></div><div class="av-note">★★★★★</div></div>
+        <div class="av-txt">Excellent déjeuner — frites délicieuses, personnel aimable même pendant les heures de pointe. Comme je suis blessé à la jambe, ils m'ont apporté l'addition sans hésiter. Service vraiment attentionné.</div>
+        <div class="av-tag">🍟 Frites recommandées</div>
+        <div class="av-date">il y a 1 mois · janvier 2025</div>
+      </div>
+      <div class="avis-card fade-up">
+        <div class="avis-head"><div><div class="av-name">kingersheim23</div><div class="av-src">TripAdvisor</div></div><div class="av-note">★★★★☆</div></div>
+        <div class="av-txt">Le seul restaurant-bar entre le Stade Jean Bouin et le Parc des Princes. Service sympa, bon rapport qualité-prix pour les jours de match. L'ambiance y est vraiment unique.</div>
+        <div class="av-tag">⚽ Top jours de match</div>
+        <div class="av-date">Avis TripAdvisor</div>
+      </div>
+      <div class="avis-card fade-up">
+        <div class="avis-head"><div><div class="av-name">Cliente fidèle</div><div class="av-src">lacarte.menu</div></div><div class="av-note">★★★★★</div></div>
+        <div class="av-txt">Notre serveuse était fantastique et rapide. Elle jonglait avec de nombreuses tables mais était excellente. La nourriture était très bonne. Les frites étaient parfaites — croustillantes et chaudes.</div>
+        <div class="av-tag">🌟 Service excellent</div>
+        <div class="av-date">Avis lacarte.menu</div>
+      </div>
+      <div class="avis-card fade-up">
+        <div class="avis-head"><div><div class="av-name">Maxime M.</div><div class="av-src">Google</div></div><div class="av-note">★★★☆☆</div></div>
+        <div class="av-txt">Passés un jour sans match, l'atmosphère était plus calme. Les jours de match, les clients apprécient bien plus l'expérience. Lieu à découvrir pendant les événements sportifs.</div>
+        <div class="av-tag">📅 Idéal jours de match</div>
+        <div class="av-date">il y a 4 mois · octobre 2025</div>
+      </div>
+      <div class="avis-card fade-up">
+        <div class="avis-head"><div><div class="av-name">Famille visiteur</div><div class="av-src">TripAdvisor</div></div><div class="av-note">★★★★★</div></div>
+        <div class="av-txt">Belle terrasse, la patronne est très sympa avec les enfants. On a bien mangé, tout était frais et bon. Je recommande ! Pas de pollution sonore, on profite vraiment du repas.</div>
+        <div class="av-tag">👨‍👩‍👧 Idéal en famille</div>
+        <div class="av-date">Avis TripAdvisor</div>
+      </div>
+      <div class="avis-card fade-up">
+        <div class="avis-head"><div><div class="av-name">Restaurant Guru</div><div class="av-src">Restaurant Guru</div></div><div class="av-note">★★★★☆</div></div>
+        <div class="av-txt">Les Deux Stades est classé parmi les meilleures brasseries du 16e arrondissement. 481 avis de visiteurs et 81 photos témoignent d'une expérience globalement très positive.</div>
+        <div class="av-tag">📊 3,9/5 · 481 avis</div>
+        <div class="av-date">Restaurant Guru · 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFOS -->
+<section id="infos">
+  <div class="container">
+    <div class="sh fade-up">
+      <span class="eyebrow">Informations pratiques</span>
+      <h2 class="sec-title">Venir <em>nous retrouver</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="infos-grid">
+      <div class="fade-up">
+        <div class="info-block">
+          <div class="info-block-title">📞 Contact</div>
+          <div class="info-row"><span class="i-ico">📱</span><div><div class="i-lbl">Téléphone</div><div class="i-val">01 47 43 12 35</div></div></div>
+          <div class="info-row"><span class="i-ico">📍</span><div><div class="i-lbl">Adresse</div><div class="i-val">41 Av. du Général Sarrail<br>75016 Paris</div></div></div>
+          <div class="info-row"><span class="i-ico">💶</span><div><div class="i-lbl">Prix moyen</div><div class="i-val">15 – 30 € / personne</div></div></div>
+        </div>
+        <div class="info-block">
+          <div class="info-block-title">✅ Services disponibles</div>
+          <div class="services">
+            <div class="srv"><span>☀️</span><span>Terrasse</span></div>
+            <div class="srv"><span>🐕</span><span>Chiens acceptés</span></div>
+            <div class="srv"><span>🍽️</span><span>Formule déjeuner</span></div>
+            <div class="srv"><span>🍺</span><span>Bar ouvert</span></div>
+            <div class="srv"><span>👨‍👩‍👧</span><span>Familles bienvenues</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="fade-up">
+        <div class="info-block">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+            <div class="info-block-title" style="margin-bottom:0;border:none;padding:0;">🕐 Horaires d'ouverture</div>
+            <div class="open-badge"><div class="open-dot"></div>Ouvert du lundi au vendredi</div>
+          </div>
+          <div class="hours-list">
+            <div class="h-row"><span class="h-day">Lundi</span><span class="h-open">06h30 – 19h00</span></div>
+            <div class="h-row"><span class="h-day">Mardi</span><span class="h-open">06h30 – 19h00</span></div>
+            <div class="h-row"><span class="h-day">Mercredi</span><span class="h-open">06h30 – 19h00</span></div>
+            <div class="h-row"><span class="h-day">Jeudi</span><span class="h-open">06h30 – 19h00</span></div>
+            <div class="h-row"><span class="h-day">Vendredi</span><span class="h-open">06h30 – 19h00</span></div>
+            <div class="h-row"><span class="h-day">Samedi</span><span class="h-closed">Fermé</span></div>
+            <div class="h-row"><span class="h-day">Dimanche</span><span class="h-closed">Fermé</span></div>
+          </div>
+          <div class="note-box">⚠️ Horaires modifiés il y a 6 semaines par appel téléphonique. Horaires susceptibles d'être étendus les jours de match — appelez pour confirmer.</div>
+        </div>
+        <div class="map-box">
+          <div class="map-inner">
+            <span class="map-pin">📍</span>
+            <div class="map-addr">41 Av. du Général Sarrail</div>
+            <div class="map-sub">75016 Paris · Métro : Porte de Saint-Cloud</div>
+            <a href="https://maps.google.com/?q=Les+Deux+Stades+41+Avenue+du+General+Sarrail+Paris" target="_blank" class="map-btn">🗺️ Ouvrir dans Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <h2>Venez nous rendre visite !</h2>
+    <p>Ouvert du lundi au vendredi dès 6h30. Nos tables vous attendent pour le petit-déjeuner, le déjeuner ou l'apéro !</p>
+    <div class="cta-btns">
+      <a href="tel:+33147431235" class="btn-white">📞 01 47 43 12 35</a>
+      <a href="https://maps.google.com/?q=Les+Deux+Stades+41+Avenue+du+General+Sarrail+Paris" target="_blank" class="btn-ghost-w">🗺️ Nous trouver</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="f-logo">Les Deux Stades</div>
+      <div class="f-sub">L'unique brasserie entre le Parc des Princes et le Stade Jean-Bouin. Depuis 1974, le rendez-vous des supporters parisiens.</div>
+    </div>
+    <div>
+      <div class="f-col-title">Navigation</div>
+      <div class="f-links">
+        <a href="#about">Le restaurant</a>
+        <a href="#menu">La carte</a>
+        <a href="#ambiance">Ambiance</a>
+        <a href="#avis">Avis clients</a>
+        <a href="#infos">Infos pratiques</a>
+      </div>
+    </div>
+    <div>
+      <div class="f-col-title">Contact</div>
+      <div class="f-contact">
+        <div class="f-ci"><span>📱</span><span>01 47 43 12 35</span></div>
+        <div class="f-ci"><span>📍</span><span>41 Av. du Général Sarrail, 75016 Paris</span></div>
+        <div class="f-ci"><span>🕐</span><span>Lun–Ven : 06h30 – 19h00</span></div>
+        <div class="f-ci"><span>🚇</span><span>Métro Porte de Saint-Cloud</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span class="f-copy">© 2025 Les Deux Stades · Tous droits réservés</span>
+    <div class="f-badges">
+      <span class="f-badge">⭐ 4,0 / 5</span>
+      <span class="f-badge">453 avis</span>
+      <span class="f-badge">Depuis 1974</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+function showMenu(id, btn) {
+  document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+const secs = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--gold)' : ''; });
+});
+</script>
+</body>
+</html>
