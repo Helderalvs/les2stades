@@ -259,6 +259,11 @@
     .formula-desc { color:var(--muted); font-size:0.82rem; margin-top:4px; }
     .formula-price { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--gold); white-space:nowrap; }
     .menu-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px; }
+    @media(max-width:768px){
+      .menu-tabs { flex-wrap:nowrap; overflow-x:auto; padding-bottom:6px; scrollbar-width:none; }
+      .menu-tabs::-webkit-scrollbar { display:none; }
+      .menu-tab { flex-shrink:0; }
+    }
     .menu-tab {
       background:white; border:1.5px solid var(--border);
       color:var(--muted); padding:9px 22px; border-radius:50px;
@@ -451,6 +456,74 @@
     .f-badges { display:flex; gap:8px; }
     .f-badge { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:4px 12px; border-radius:50px; font-size:0.68rem; font-weight:600; }
 
+    /* ══ ADMIN PANEL ══ */
+    #adminOverlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.78); z-index:9999;
+      align-items:center; justify-content:center; padding:20px;
+    }
+    .admin-box {
+      background:white; border-radius:20px; padding:32px;
+      max-width:480px; width:100%; max-height:90vh; overflow-y:auto;
+      position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.3);
+    }
+    .admin-close {
+      position:absolute; top:14px; right:16px;
+      background:none; border:none; font-size:1.4rem;
+      cursor:pointer; color:var(--muted); line-height:1;
+    }
+    .admin-title { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:700; color:var(--gold); margin-bottom:6px; }
+    .admin-sub { color:var(--muted); font-size:0.82rem; margin-bottom:22px; line-height:1.5; }
+    .admin-step { display:none; }
+    .admin-step.active { display:block; }
+    .admin-input {
+      width:100%; padding:12px 16px; border:1.5px solid var(--border);
+      border-radius:10px; font-size:0.95rem; outline:none;
+      font-family:'Inter',sans-serif; margin-bottom:10px; transition:border-color 0.2s;
+    }
+    .admin-input:focus { border-color:var(--gold); }
+    .admin-btn {
+      width:100%; background:var(--gold); color:white; border:none;
+      padding:13px; border-radius:10px; font-weight:700; font-size:0.9rem;
+      cursor:pointer; transition:all 0.2s; margin-bottom:8px;
+    }
+    .admin-btn:hover { background:var(--gold2); }
+    .admin-btn:disabled { opacity:0.6; cursor:not-allowed; }
+    .admin-btn-sec {
+      width:100%; background:var(--bg3); color:var(--text2);
+      border:1.5px solid var(--border); padding:11px; border-radius:10px;
+      font-weight:600; font-size:0.82rem; cursor:pointer; transition:all 0.2s;
+    }
+    .admin-btn-sec:hover { border-color:var(--gold); }
+    .upload-zone {
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+      border:2px dashed #fde68a; border-radius:14px; padding:28px 20px;
+      cursor:pointer; background:var(--gold-pale); transition:all 0.2s;
+      margin-bottom:14px;
+    }
+    .upload-zone:hover { border-color:var(--gold); background:#fef9e0; }
+    .upload-ico { font-size:2.4rem; }
+    .upload-lbl { font-weight:700; color:var(--gold); font-size:0.9rem; }
+    .upload-hint { font-size:0.72rem; color:var(--muted); }
+    .pw-error { display:none; color:var(--red); font-size:0.78rem; margin-bottom:10px; }
+    .ardoise-date {
+      font-family:'Playfair Display',serif; font-style:italic;
+      color:var(--gold); font-size:0.95rem; margin-bottom:18px;
+    }
+    .ardoise-photo {
+      display:flex; justify-content:center; margin-bottom:22px;
+    }
+    .ardoise-photo img {
+      max-width:480px; width:100%; border-radius:16px;
+      border:2px solid #fde68a; box-shadow:var(--shadow-lg);
+      display:block;
+    }
+    .ardoise-empty {
+      text-align:center; padding:52px 20px; color:var(--muted); font-size:0.9rem; line-height:1.8;
+    }
+    .ardoise-empty .ae-ico { font-size:3rem; display:block; margin-bottom:12px; }
+    .admin-fab { display:none; }
+
     /* ══ ANIMATIONS ══ */
     .fade-up { opacity:0; transform:translateY(26px); transition:opacity 0.65s ease, transform 0.65s ease; }
     .fade-up.visible { opacity:1; transform:translateY(0); }
@@ -500,15 +573,15 @@
       <span class="l1">Les Deux</span>
       <span class="l2">Stades</span>
     </h1>
-    <p class="hero-sub">L'unique brasserie entre le Parc des Princes et le Stade Jean-Bouin. Terrasse, cuisine maison et ambiance matchday inoubliable depuis 1974.</p>
+    <p class="hero-sub">L'unique brasserie entre le Parc des Princes et le Stade Jean-Bouin. Terrasse, cuisine maison et ambiance matchday inoubliable depuis 1985.</p>
     <div class="hero-btns">
       <a href="#menu" class="btn-gold">Voir la carte</a>
       <a href="#infos" class="btn-out">Accès &amp; Horaires</a>
     </div>
     <div class="hero-bar">
       <div class="hero-bar-item"><span>📍</span><span>41 Av. du Général Sarrail, 75016 Paris</span></div>
-      <div class="hero-bar-item"><span>🕐</span><span>Lun–Ven 06h30–19h00 · Week-end fermé</span></div>
-      <div class="hero-bar-item"><span>💶</span><span>15 – 30 € / personne</span></div>
+      <div class="hero-bar-item"><span>🕐</span><span>Lun–Ven 06h30–19h00 · Fermé week-end sauf jours de match</span></div>
+      <div class="hero-bar-item"><span>💶</span><span>5 – 29 € / personne</span></div>
       <div class="hero-bar-item"><span>🐕</span><span>Chiens acceptés</span></div>
       <div class="hero-bar-item"><span>☀️</span><span>Grande terrasse</span></div>
     </div>
@@ -526,12 +599,12 @@
     <div class="about-grid">
       <div class="fade-up">
         <div class="about-text">
-          <p>Depuis <strong>1974</strong>, Les Deux Stades occupe une place de choix dans le Paris sportif : idéalement situé à deux pas du <strong>Parc des Princes</strong> et du <strong>Stade Jean-Bouin</strong>, c'est le rendez-vous incontournable avant et après chaque match.</p>
+          <p>Depuis <strong>1985</strong>, Les Deux Stades occupe une place de choix dans le Paris sportif : idéalement situé à deux pas du <strong>Parc des Princes</strong> et du <strong>Stade Jean-Bouin</strong>, c'est le rendez-vous incontournable avant et après chaque match.</p>
           <p>Notre brasserie vous accueille dans une <strong>atmosphère chaleureuse et conviviale</strong> pour déguster une cuisine généreuse, des frites maison croustillantes et des boissons fraîches servies avec le sourire.</p>
           <p>Les jours de match, l'ambiance monte d'un cran : les supporters se retrouvent sur notre <strong>grande terrasse</strong> pour vivre la passion du football ensemble.</p>
         </div>
         <div class="highlights">
-          <div class="hl"><div class="hl-dot"></div><span>Établissement fondé en 1974 — plus de 50 ans d'histoire</span></div>
+          <div class="hl"><div class="hl-dot"></div><span>Établissement fondé en 1985 — plus de 40 ans d'histoire</span></div>
           <div class="hl"><div class="hl-dot"></div><span>Seul bar-restaurant entre les deux stades parisiens</span></div>
           <div class="hl"><div class="hl-dot"></div><span>Terrasse ensoleillée sur l'avenue du Général Sarrail</span></div>
           <div class="hl"><div class="hl-dot"></div><span>Personnel accueillant même en heure de pointe</span></div>
@@ -539,8 +612,7 @@
       </div>
       <div class="fade-up">
         <div class="about-visual">
-          <img class="real-photo" src="rc5f-design-Les-Deux-Stades-2025-10.jpg" alt="Les Deux Stades — Terrasse Paris 16e"/>
-          <div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(0,0,0,0) 0%,transparent 100%);pointer-events:none;"></div>
+          <img class="real-photo" src="../Pictures/rc5f-design-Les-Deux-Stades-2025-10.jpg" alt="Les Deux Stades — Terrasse Paris 16e"/>
           <div style="position:absolute;bottom:14px;left:16px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);border:1px solid rgba(212,168,83,0.4);border-radius:50px;padding:6px 16px;font-family:'Playfair Display',serif;font-style:italic;font-size:0.85rem;color:#fde68a;">🏟️ La brasserie des supporters</div>
         </div>
       </div>
@@ -556,60 +628,234 @@
       <h2 class="sec-title">Une cuisine <em>généreuse et savoureuse</em></h2>
       <div class="gold-line"></div>
     </div>
-    <div class="formulas fade-up">
-      <div class="formula">
-        <div>
-          <div class="formula-name">🍽️ Formule Déjeuner</div>
-          <div class="formula-desc">Entrée + Plat ou Plat + Dessert</div>
-        </div>
-        <div class="formula-price">11 €</div>
-      </div>
-      <div class="formula">
-        <div>
-          <div class="formula-name">🍽️ Formule Complète</div>
-          <div class="formula-desc">Entrée + Plat + Dessert</div>
-        </div>
-        <div class="formula-price">14 €</div>
-      </div>
-    </div>
     <div class="menu-tabs fade-up">
-      <div class="menu-tab active" onclick="showMenu('entrees',this)">🥗 Entrées</div>
-      <div class="menu-tab" onclick="showMenu('plats',this)">🍽️ Plats</div>
+      <div class="menu-tab active" onclick="showMenu('platdujour',this)">📋 Plat du Jour</div>
+      <div class="menu-tab" onclick="showMenu('alacarte',this)">🍽️ À La Carte</div>
+      <div class="menu-tab" onclick="showMenu('salades',this)">🥗 Salades</div>
+      <div class="menu-tab" onclick="showMenu('sandwichs',this)">🥖 Sandwichs</div>
+      <div class="menu-tab" onclick="showMenu('partager',this)">🧀 À Partager</div>
       <div class="menu-tab" onclick="showMenu('desserts',this)">🍮 Desserts</div>
-      <div class="menu-tab" onclick="showMenu('boissons',this)">🍺 Boissons</div>
+      <div class="menu-tab" onclick="showMenu('bieres',this)">🍺 Bières</div>
+      <div class="menu-tab" onclick="showMenu('vins',this)">🍷 Vins</div>
+      <div class="menu-tab" onclick="showMenu('alcools',this)">🥃 Alcools</div>
+      <div class="menu-tab" onclick="showMenu('boissons',this)">☕ Boissons</div>
     </div>
-    <div id="entrees" class="menu-section active fade-up">
-      <div class="menu-grid">
-        <div class="menu-card"><div><div class="mc-name">Salade verte</div><div class="mc-desc">Salade fraîche de saison, vinaigrette maison</div></div><div class="mc-price">7 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Soupe du jour</div><div class="mc-desc">Préparation maison selon arrivage du marché</div></div><div class="mc-price">7 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Œuf mayonnaise</div><div class="mc-desc">Œufs frais, mayonnaise artisanale</div></div><div class="mc-price">7 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Charcuterie du moment</div><div class="mc-desc">Sélection du jour, pain frais<br><span class="mc-badge">🌟 Recommandé</span></div></div><div class="mc-price">9 €</div></div>
+
+    <!-- Plat du Jour -->
+    <div id="platdujour" class="menu-section active fade-up">
+      <div class="ardoise-empty">
+        <span class="ae-ico">📋</span>
+        Aucun plat du jour renseigné pour le moment.<br>
+        Le personnel peut mettre à jour l'ardoise via le bouton admin.
       </div>
     </div>
-    <div id="plats" class="menu-section fade-up">
+
+    <!-- À La Carte -->
+    <div id="alacarte" class="menu-section fade-up">
+      <div style="margin-bottom:20px;padding:12px 16px;background:var(--gold-pale);border:1px solid #fde68a;border-radius:10px;font-size:0.82rem;color:#854d0e;">
+        🥩 <strong>Garniture au choix :</strong> Frites maison, purée maison, haricots verts frais &nbsp;|&nbsp; <strong>Sauce au choix :</strong> Bleu, poivre, béarnaise
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">À La Parisienne</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">La Fameuse Quiche du Chef</div><div class="mc-desc">Salade</div></div><div class="mc-price">14 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Croque Monsieur</div><div class="mc-desc">Frites / salade</div></div><div class="mc-price">12 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Croque Madame</div><div class="mc-desc">Frites / salade</div></div><div class="mc-price">13 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Omelette Nature</div><div class="mc-desc">Frites / salade</div></div><div class="mc-price">12 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Omelette Mixte</div><div class="mc-desc">Frites / salade</div></div><div class="mc-price">13 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Camembert ou Reblochon Rôti</div><div class="mc-desc">Charcuterie / frites / salade</div></div><div class="mc-price">17 €</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Les Classics</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">La pièce de boucher (220 gr)</div><div class="mc-desc">Garniture & sauce au choix</div></div><div class="mc-price">19 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le tartare de bœuf</div><div class="mc-desc">Garniture & sauce au choix</div></div><div class="mc-price">19 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le poulet fermier et son jus</div><div class="mc-desc">Garniture au choix</div></div><div class="mc-price">18 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Andouillette 5A sauce moutarde</div><div class="mc-desc">Garniture au choix</div></div><div class="mc-price">22 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">L'entrecôte grillée (320 gr)</div><div class="mc-desc">Garniture & sauce au choix<br><span class="mc-badge">🔥 Pièce maîtresse</span></div></div><div class="mc-price">28 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Filet de bœuf</div><div class="mc-desc">Garniture & sauce au choix<br><span class="mc-badge">⭐ Best-seller</span></div></div><div class="mc-price">29 €</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Les Burgers · Pain maison · Frites maison</p>
       <div class="menu-grid">
-        <div class="menu-card"><div><div class="mc-name">Steak frites</div><div class="mc-desc">Pièce de bœuf grillée, frites maison croustillantes<br><span class="mc-badge">⭐ Best-seller</span></div></div><div class="mc-price">16 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Croque-monsieur</div><div class="mc-desc">Pain de mie, jambon, fromage fondu, béchamel</div></div><div class="mc-price">10 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Burger maison</div><div class="mc-desc">Pain artisanal, steak haché, cheddar, salade, tomate</div></div><div class="mc-price">14 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Plat du jour</div><div class="mc-desc">Selon arrivage — à demander au serveur</div></div><div class="mc-price">13 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Omelette garnie</div><div class="mc-desc">Jambon, fromage ou champignons, frites</div></div><div class="mc-price">11 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Sandwich baguette</div><div class="mc-desc">Garniture au choix, pain frais du jour</div></div><div class="mc-price">8 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Classic Burger</div><div class="mc-desc">Cheddar, oignons confits<br><span class="mc-badge">⭐ Best-seller</span></div></div><div class="mc-price">18 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Cantalou Burger</div><div class="mc-desc">Bacon, Cantal, oignons confits</div></div><div class="mc-price">19 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Végétarien Burger</div><div class="mc-desc">Steak de quinoa</div></div><div class="mc-price">19 €</div></div>
       </div>
     </div>
+
+    <!-- Salades -->
+    <div id="salades" class="menu-section fade-up">
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">La Parisienne</div><div class="mc-desc">Jambon de Paris, emmental, haricots verts, tomate, œuf</div></div><div class="mc-price">16 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">L'Auvergnate</div><div class="mc-desc">Jambon de Pays, Cantal, haricots verts, tomate, œuf</div></div><div class="mc-price">16 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Saumon Fumé</div><div class="mc-desc">Crevette, toast, haricots verts, œuf, tomates cerises, salade</div></div><div class="mc-price">16 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Blanc de Volaille</div><div class="mc-desc">Haricots verts, tomates cerises, salade, parmesan, œuf</div></div><div class="mc-price">16 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Salade Quinoa</div><div class="mc-desc">Concombre, poivrons, feta, olive</div></div><div class="mc-price">16 €</div></div>
+      </div>
+    </div>
+
+    <!-- Sandwichs -->
+    <div id="sandwichs" class="menu-section fade-up">
+      <div style="margin-bottom:16px;padding:10px 16px;background:var(--gold-pale);border:1px solid #fde68a;border-radius:10px;font-size:0.82rem;color:#854d0e;">
+        🥖 Disponibles en salle et à emporter
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Jambon Beurre</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Saucisson Sec</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Pâté de Campagne</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Rillette</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Emmental</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Camembert</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Jambon de Pays</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Saint-Nectaire</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Cantal</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Mixte Jambon - Emmental</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Jambon de Pays - St-Nectaire</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Jambon de Pays - Emmental</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Crudités Jambon</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Crudités Emmental</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Crudités Thon</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Crudités Poulet</div></div><div class="mc-price">7 €</div></div>
+      </div>
+    </div>
+
+    <!-- À Partager -->
+    <div id="partager" class="menu-section fade-up">
+      <div style="margin-bottom:20px;padding:12px 16px;background:var(--gold-pale);border:1px solid #fde68a;border-radius:10px;font-size:0.82rem;color:#854d0e;">
+        🧀 <strong>Fromages disponibles :</strong> Saint-Nectaire, Cantal, Bleu d'Auvergne, Emmental, Crottin de chèvre, Camembert
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Planches À Partager à 2</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">La Planche de Charcuteries</div><div class="mc-desc">Jambon de pays, saucisson, saucisson à l'ail, pâté de campagne</div></div><div class="mc-price">19 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">La Planche Mixte + Charcuteries</div><div class="mc-desc">Cantal, Camembert, Bleu d'Auvergne, St Nectaire + charcuteries<br><span class="mc-badge">🌟 Recommandé</span></div></div><div class="mc-price">26 €</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Assiettes de Fromages</p>
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Assiette de Fromage au choix</div><div class="mc-desc">1 fromage parmi : St-Nectaire, Cantal, Bleu d'Auvergne, Emmental, Crottin de chèvre, Camembert</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Assiette de 3 Fromages au choix</div><div class="mc-desc">St-Nectaire, Cantal, Bleu d'Auvergne, Emmental, Crottin de chèvre, Camembert</div></div><div class="mc-price">9 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Assiette Fromage avec Salade</div><div class="mc-desc">Bleu d'Auvergne, Emmental, Camembert, Cantal</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Assiette 3 Fromages avec Salade</div><div class="mc-desc">Bleu d'Auvergne, Emmental, Camembert, Cantal</div></div><div class="mc-price">9 €</div></div>
+      </div>
+    </div>
+
+    <!-- Desserts -->
     <div id="desserts" class="menu-section fade-up">
       <div class="menu-grid">
-        <div class="menu-card"><div><div class="mc-name">Tarte du jour</div><div class="mc-desc">Pâtisserie maison selon saison</div></div><div class="mc-price">7 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Crème brûlée</div><div class="mc-desc">Classique français, caramel croustillant<br><span class="mc-badge">🌟 Recommandé</span></div></div><div class="mc-price">8 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Mousse au chocolat</div><div class="mc-desc">Chocolat noir, légère et onctueuse</div></div><div class="mc-price">7 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Glace / Sorbet</div><div class="mc-desc">2 boules au choix</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">La Crème brulée "gousse vanille"</div></div><div class="mc-price">6,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Panna cotta coulis de fruits rouges</div></div><div class="mc-price">6,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le brownie</div></div><div class="mc-price">6,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Flan maison</div></div><div class="mc-price">6,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le vrai gâteau chocolat noir</div></div><div class="mc-price">6,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Café Expresso Gourmand</div><div class="mc-desc">4 pièces</div></div><div class="mc-price">7,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Le Crème ou Thé Gourmand</div><div class="mc-desc">4 pièces</div></div><div class="mc-price">8,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Petit pot de glace</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Cake nature</div></div><div class="mc-price">2,50 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Cake Pomme</div></div><div class="mc-price">3 €</div></div>
       </div>
     </div>
-    <div id="boissons" class="menu-section fade-up">
+
+    <!-- Bières -->
+    <div id="bieres" class="menu-section fade-up">
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Bière Pression</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">Bière Blonde</div><div class="mc-desc">Pression fraîche · 25cl 5 € / 50cl 10 €</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Affligem</div><div class="mc-desc">Bière blonde belge · 25cl 6 € / 50cl 11 €</div></div><div class="mc-price">6 €</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Bières Bouteilles</p>
       <div class="menu-grid">
-        <div class="menu-card"><div><div class="mc-name">Pression (25 cl)</div><div class="mc-desc">Bière blonde pression fraîche</div></div><div class="mc-price">4 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Soft / Coca-Cola</div><div class="mc-desc">Boissons fraîches</div></div><div class="mc-price">4 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Café / Expresso</div><div class="mc-desc">Serré ou allongé</div></div><div class="mc-price">2 €</div></div>
-        <div class="menu-card"><div><div class="mc-name">Verre de vin</div><div class="mc-desc">Rouge, blanc ou rosé — sélection du maison</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Heineken (33cl)</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Heineken sans Alcool (33cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Desperados (33cl)</div></div><div class="mc-price">8 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Cidre brut (25cl)</div></div><div class="mc-price">6 €</div></div>
+      </div>
+    </div>
+
+    <!-- Vins -->
+    <div id="vins" class="menu-section fade-up">
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Les Vins</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">Côtes du Rhône la Renjandiere</div><div class="mc-desc">Rouge · Verre 6 € / 1/4 11 €</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Chiroubles</div><div class="mc-desc">Rouge Beaujolais · Verre 6 € / Bouteille</div></div><div class="mc-price">30 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Morgon</div><div class="mc-desc">Rouge Beaujolais · Verre 6 € / Bouteille</div></div><div class="mc-price">30 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Quincy Domaine Siret-Courtaud</div><div class="mc-desc">Blanc · Verre 7 € / 1/4 11 €</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Clémentine Rosé de Provence</div><div class="mc-desc">Rosé · Verre 7 € / Bouteille</div></div><div class="mc-price">37 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Givry</div><div class="mc-desc">Bourgogne · Bouteille</div></div><div class="mc-price">41 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Haut Côte de Beaune</div><div class="mc-desc">Bourgogne · Bouteille</div></div><div class="mc-price">45 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Lalande de Pomerol — Château Perron</div><div class="mc-desc">Bordeaux · Bouteille</div></div><div class="mc-price">45 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Ladoix</div><div class="mc-desc">Bourgogne · Bouteille</div></div><div class="mc-price">80 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Vin Au Verre</div><div class="mc-desc">Voir l'ardoise du moment</div></div><div class="mc-price">—</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Champagnes</p>
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Champagne Secondé Brut</div><div class="mc-desc">Coupe 10 € / Bouteille</div></div><div class="mc-price">55 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Champagne Ruinart Brut</div><div class="mc-desc">Bouteille</div></div><div class="mc-price">80 €</div></div>
+      </div>
+    </div>
+
+    <!-- Alcools -->
+    <div id="alcools" class="menu-section fade-up">
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Apéritifs</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">Salers (5cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Ricard (4cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Martini Rosso / Bianco (5cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Porto Rouge (5cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Campari (5cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Kir</div><div class="mc-desc">Cassis ou pêche</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Spritz</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Anis (2cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Tequila (4cl)</div></div><div class="mc-price">8 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Ballantine's (4cl)</div></div><div class="mc-price">9 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Champagne (12cl)</div></div><div class="mc-price">11 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Jack Daniel's (4cl)</div></div><div class="mc-price">11 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Aberlour (4cl)</div></div><div class="mc-price">11 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Supplément Sodas</div></div><div class="mc-price">1 €</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Alcools & Liqueurs (4cl)</p>
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">Get 27 ou 31</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Baileys</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Gin</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Vodka</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Poire</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Framboise</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Rhum Havana Club 3 ans</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Cognac ***</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Armagnac ***</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Calvados</div></div><div class="mc-price">10 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Vieille prune</div></div><div class="mc-price">8 €</div></div>
+      </div>
+    </div>
+
+    <!-- Boissons -->
+    <div id="boissons" class="menu-section fade-up">
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Boissons Chaudes</p>
+      <div class="menu-grid" style="margin-bottom:28px;">
+        <div class="menu-card"><div><div class="mc-name">Café Expresso</div></div><div class="mc-price">3 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Double Expresso</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Café crème · Chocolat chaud</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Lait chaud</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Thé / Infusion</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Capuccino</div></div><div class="mc-price">7 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Grog au Rhum</div></div><div class="mc-price">6,50 €</div></div>
+      </div>
+      <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Boissons Fraîches</p>
+      <div class="menu-grid">
+        <div class="menu-card"><div><div class="mc-name">1/4 Evian (33cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Jus de Fruits Granini (25cl)</div></div><div class="mc-price">5 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Coca-Cola (33cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Coca-Cola Zéro (33cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Sprite (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Fanta (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Orangina (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Fuzetea (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Schweppes (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Perrier (33cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">1/4 Limonade</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Jus de Fruits (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Vittel</div><div class="mc-desc">50cl 6 € / 1L</div></div><div class="mc-price">8 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">San Pellegrino</div><div class="mc-desc">50cl 6 € / 1L</div></div><div class="mc-price">8 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Citron pressé (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Orange pressée (25cl)</div></div><div class="mc-price">6 €</div></div>
+        <div class="menu-card"><div><div class="mc-name">Red-Bull (25cl)</div></div><div class="mc-price">6 €</div></div>
       </div>
     </div>
   </div>
@@ -653,7 +899,7 @@
         <div class="avis-head"><div><div class="av-name">Leonardo Collino</div><div class="av-src">Google</div></div><div class="av-note">★★★★★</div></div>
         <div class="av-txt">Excellent déjeuner — frites délicieuses, personnel aimable même pendant les heures de pointe. Comme je suis blessé à la jambe, ils m'ont apporté l'addition sans hésiter. Service vraiment attentionné.</div>
         <div class="av-tag">🍟 Frites recommandées</div>
-        <div class="av-date">il y a 1 mois · janvier 2025</div>
+        <div class="av-date">il y a 3 mois · janvier 2026</div>
       </div>
       <div class="avis-card fade-up">
         <div class="avis-head"><div><div class="av-name">kingersheim23</div><div class="av-src">TripAdvisor</div></div><div class="av-note">★★★★☆</div></div>
@@ -671,7 +917,7 @@
         <div class="avis-head"><div><div class="av-name">Maxime M.</div><div class="av-src">Google</div></div><div class="av-note">★★★☆☆</div></div>
         <div class="av-txt">Passés un jour sans match, l'atmosphère était plus calme. Les jours de match, les clients apprécient bien plus l'expérience. Lieu à découvrir pendant les événements sportifs.</div>
         <div class="av-tag">📅 Idéal jours de match</div>
-        <div class="av-date">il y a 4 mois · octobre 2025</div>
+        <div class="av-date">il y a 5 mois · novembre 2025</div>
       </div>
       <div class="avis-card fade-up">
         <div class="avis-head"><div><div class="av-name">Famille visiteur</div><div class="av-src">TripAdvisor</div></div><div class="av-note">★★★★★</div></div>
@@ -683,7 +929,7 @@
         <div class="avis-head"><div><div class="av-name">Restaurant Guru</div><div class="av-src">Restaurant Guru</div></div><div class="av-note">★★★★☆</div></div>
         <div class="av-txt">Les Deux Stades est classé parmi les meilleures brasseries du 16e arrondissement. 481 avis de visiteurs et 81 photos témoignent d'une expérience globalement très positive.</div>
         <div class="av-tag">📊 3,9/5 · 481 avis</div>
-        <div class="av-date">Restaurant Guru · 2025</div>
+        <div class="av-date">Restaurant Guru · 2026</div>
       </div>
     </div>
   </div>
@@ -720,7 +966,7 @@
         <div class="info-block">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
             <div class="info-block-title" style="margin-bottom:0;border:none;padding:0;">🕐 Horaires d'ouverture</div>
-            <div class="open-badge"><div class="open-dot"></div>Ouvert du lundi au vendredi</div>
+            <div id="openBadge"></div>
           </div>
           <div class="hours-list">
             <div class="h-row"><span class="h-day">Lundi</span><span class="h-open">06h30 – 19h00</span></div>
@@ -731,7 +977,7 @@
             <div class="h-row"><span class="h-day">Samedi</span><span class="h-closed">Fermé</span></div>
             <div class="h-row"><span class="h-day">Dimanche</span><span class="h-closed">Fermé</span></div>
           </div>
-          <div class="note-box">⚠️ Horaires modifiés il y a 6 semaines par appel téléphonique. Horaires susceptibles d'être étendus les jours de match — appelez pour confirmer.</div>
+          <div class="note-box">⚽ Ouverture possible le week-end les jours de match au Parc des Princes ou au Stade Jean-Bouin — appelez-nous pour confirmer au 01 47 43 12 35.</div>
         </div>
         <div class="map-box">
           <div class="map-inner">
@@ -758,12 +1004,47 @@
   </div>
 </section>
 
+<!-- ADMIN FAB -->
+<button class="admin-fab" onclick="openAdmin()" title="Espace admin">⚙️</button>
+
+<!-- ADMIN PANEL -->
+<div id="adminOverlay">
+  <div class="admin-box">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+
+    <!-- Étape 1 : Mot de passe -->
+    <div class="admin-step active" id="adminStep1">
+      <div class="admin-title">🔐 Espace Admin</div>
+      <p class="admin-sub">Réservé au personnel des Deux Stades.</p>
+      <input type="password" id="adminPw" class="admin-input" placeholder="Mot de passe"
+        onkeydown="if(event.key==='Enter')checkAdminPw()">
+      <div class="pw-error" id="pwError">❌ Mot de passe incorrect.</div>
+      <button class="admin-btn" onclick="checkAdminPw()">Se connecter</button>
+    </div>
+
+    <!-- Étape 2 : Upload photo -->
+    <div class="admin-step" id="adminStep2">
+      <div class="admin-title">📸 Ardoise du jour</div>
+      <p class="admin-sub">Prenez en photo l'ardoise — elle s'affiche immédiatement sur le site.</p>
+
+      <label for="ardoiseFile" class="upload-zone">
+        <span class="upload-ico">📷</span>
+        <span class="upload-lbl">Prendre / Choisir une photo</span>
+        <span class="upload-hint">Appareil photo ou galerie</span>
+      </label>
+      <input type="file" id="ardoiseFile" accept="image/*" capture="environment" style="display:none;">
+
+      <button class="admin-btn-sec" onclick="clearArdoise()" style="color:var(--red);border-color:#fecaca;background:#fff5f5;margin-top:8px;">🗑️ Supprimer l'ardoise actuelle</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div>
       <div class="f-logo">Les Deux Stades</div>
-      <div class="f-sub">L'unique brasserie entre le Parc des Princes et le Stade Jean-Bouin. Depuis 1974, le rendez-vous des supporters parisiens.</div>
+      <div class="f-sub">L'unique brasserie entre le Parc des Princes et le Stade Jean-Bouin. Depuis 1985, le rendez-vous des supporters parisiens.</div>
     </div>
     <div>
       <div class="f-col-title">Navigation</div>
@@ -786,33 +1067,169 @@
     </div>
   </div>
   <div class="footer-bot">
-    <span class="f-copy">© 2025 Les Deux Stades · Tous droits réservés</span>
+    <span class="f-copy">© 2026 Les Deux Stades · Tous droits réservés</span>
     <div class="f-badges">
       <span class="f-badge">⭐ 4,0 / 5</span>
       <span class="f-badge">453 avis</span>
-      <span class="f-badge">Depuis 1974</span>
+      <span class="f-badge">Depuis 1985</span>
     </div>
   </div>
 </footer>
 
 <script>
 
+/* ══ MENU TABS ══ */
 function showMenu(id, btn) {
   document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('active'); el.classList.add('visible'); }
   btn.classList.add('active');
 }
+
+/* ══ SCROLL ANIMATIONS ══ */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.07 });
 document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
 const secs = document.querySelectorAll('section[id]');
 const navAs = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
   let cur = '';
   secs.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
   navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--gold)' : ''; });
+});
+
+/* ══ ADMIN ARDOISE ══ */
+const ADMIN_PW    = '2stades';
+const KEY_ARDOISE = 'ds_ardoise';
+
+function openAdmin() {
+  document.getElementById('adminPw').value = '';
+  document.getElementById('pwError').style.display = 'none';
+  goToStep(1);
+  document.getElementById('adminOverlay').style.display = 'flex';
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').style.display = 'none';
+}
+document.getElementById('adminOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('adminOverlay')) closeAdmin();
+});
+function goToStep(n) {
+  document.querySelectorAll('.admin-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('adminStep' + n).classList.add('active');
+}
+function checkAdminPw() {
+  if (document.getElementById('adminPw').value === ADMIN_PW) {
+    goToStep(2);
+  } else {
+    document.getElementById('pwError').style.display = 'block';
+  }
+}
+
+/* Photo sélectionnée → compresser → publier direct */
+document.getElementById('ardoiseFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      // Redimensionner max 1200px de large pour tenir dans localStorage
+      const MAX = 1200;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const compressed = canvas.toDataURL('image/jpeg', 0.75);
+
+      try {
+        const today = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+        localStorage.setItem(KEY_ARDOISE, JSON.stringify({ date: today, imageUrl: compressed }));
+        renderArdoise();
+        closeAdmin();
+        document.querySelector('.menu-tab').click();
+      } catch (err) {
+        alert('Photo trop grande. Essayez avec une résolution plus basse.');
+      }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+function clearArdoise() {
+  if (!confirm('Supprimer la photo de l\'ardoise ?')) return;
+  localStorage.removeItem(KEY_ARDOISE);
+  renderArdoise();
+  closeAdmin();
+}
+
+function renderArdoise() {
+  const section = document.getElementById('platdujour');
+  const raw = localStorage.getItem(KEY_ARDOISE);
+  if (!raw) {
+    section.innerHTML = `<div class="ardoise-empty"><span class="ae-ico">📋</span>Le plat du jour n'est pas encore disponible.<br>Revenez un peu plus tard ou appelez-nous au <strong>01 47 43 12 35</strong>.</div>`;
+    return;
+  }
+  const d = JSON.parse(raw);
+  section.innerHTML = `
+    <div class="ardoise-date">📋 Ardoise du ${d.date}</div>
+    <div class="ardoise-photo"><img src="${d.imageUrl}" alt="Ardoise du jour"></div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderArdoise();
+  updateOpenBadge();
+  setDefaultTab();
+});
+
+/* Badge ouvert/fermé dynamique */
+function updateOpenBadge() {
+  const now = new Date();
+  const day = now.getDay(); // 0=dim, 6=sam
+  const h = now.getHours() + now.getMinutes() / 60;
+  const isOpen = day >= 1 && day <= 5 && h >= 6.5 && h < 19;
+  const badge = document.getElementById('openBadge');
+  if (!badge) return;
+  if (isOpen) {
+    badge.innerHTML = `<div class="open-badge"><div class="open-dot"></div>Ouvert maintenant</div>`;
+  } else {
+    badge.innerHTML = `<div class="open-badge" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">
+      <div class="open-dot" style="background:#ef4444;box-shadow:0 0 6px #ef4444;"></div>Fermé actuellement
+    </div>`;
+  }
+}
+
+/* Onglet par défaut : Plat du Jour si ardoise dispo, sinon À La Carte */
+function setDefaultTab() {
+  const hasArdoise = !!localStorage.getItem(KEY_ARDOISE);
+  const defaultId = hasArdoise ? 'platdujour' : 'alacarte';
+  document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  const section = document.getElementById(defaultId);
+  if (section) { section.classList.add('active'); section.classList.add('visible'); }
+  const tabs = document.querySelectorAll('.menu-tab');
+  tabs.forEach(t => {
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + defaultId + "'")) {
+      t.classList.add('active');
+    }
+  });
+}
+
+/* Déclencheur secret : 5 clics sur le logo */
+let _tapCount = 0, _tapTimer;
+document.querySelector('.nav-logo').addEventListener('click', () => {
+  _tapCount++;
+  clearTimeout(_tapTimer);
+  _tapTimer = setTimeout(() => _tapCount = 0, 2000);
+  if (_tapCount >= 5) { _tapCount = 0; openAdmin(); }
 });
 </script>
 </body>
