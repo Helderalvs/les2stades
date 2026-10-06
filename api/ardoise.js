@@ -31,6 +31,9 @@ async function removeAll(exceptUrl) {
   if (urls.length) await del(urls);
 }
 
+const parisDay = d =>
+  new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date(d));
+
 const view = b => ({
   imageUrl: `${b.url}?v=${new Date(b.uploadedAt).getTime()}`,
   uploadedAt: b.uploadedAt,
@@ -39,7 +42,9 @@ const view = b => ({
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const latest = await current();
+      // L'ardoise n'est affichée que le jour de son envoi (heure de Paris).
+      const found = await current();
+      const latest = found && parisDay(found.uploadedAt) === parisDay(new Date()) ? found : null;
       // 5 min de cache CDN : au pire ~290 lectures/jour, sous le quota gratuit.
       res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=300');
       return res.status(200).json(latest ? view(latest) : null);
