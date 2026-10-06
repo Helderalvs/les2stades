@@ -1025,7 +1025,7 @@
     <!-- Étape 2 : Upload photo -->
     <div class="admin-step" id="adminStep2">
       <div class="admin-title">📸 Ardoise du jour</div>
-      <p class="admin-sub">Prenez en photo l'ardoise — elle s'affiche immédiatement sur le site.</p>
+      <p class="admin-sub">Prenez en photo l'ardoise — elle est mise en ligne pour tous les clients.</p>
 
       <label for="ardoiseFile" class="upload-zone">
         <span class="upload-ico">📷</span>
@@ -1102,8 +1102,24 @@ window.addEventListener('scroll', () => {
 });
 
 /* ══ ADMIN ARDOISE ══ */
-const ADMIN_PW    = '2stades';
-const KEY_ARDOISE = 'ds_ardoise';
+const API_ARDOISE = '/api/ardoise';
+const KEY_BUST    = 'ds_ardoise_v';
+let adminPw = '';
+let ardoise = null;
+
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+async function adminCall(payload) {
+  const r = await fetch(API_ARDOISE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: adminPw, ...payload })
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(data.error || 'Erreur'), { status: r.status });
+  return data;
+}
 
 function openAdmin() {
   document.getElementById('adminPw').value = '';
@@ -1121,24 +1137,34 @@ function goToStep(n) {
   document.querySelectorAll('.admin-step').forEach(s => s.classList.remove('active'));
   document.getElementById('adminStep' + n).classList.add('active');
 }
-function checkAdminPw() {
-  if (document.getElementById('adminPw').value === ADMIN_PW) {
+async function checkAdminPw() {
+  const err = document.getElementById('pwError');
+  err.style.display = 'none';
+  adminPw = document.getElementById('adminPw').value;
+  try {
+    await adminCall({ action: 'login' });
     goToStep(2);
-  } else {
-    document.getElementById('pwError').style.display = 'block';
+  } catch (e) {
+    err.textContent = e.status === 401 ? '❌ Mot de passe incorrect.' : '❌ Connexion impossible, réessayez.';
+    err.style.display = 'block';
   }
 }
 
-/* Photo sélectionnée → compresser → publier direct */
+function setUploadLabel(txt) {
+  document.querySelector('.upload-lbl').textContent = txt;
+}
+
+/* Photo sélectionnée → compresser → publier en ligne */
 document.getElementById('ardoiseFile').addEventListener('change', e => {
-  const file = e.target.files[0];
+  const input = e.target;
+  const file = input.files[0];
   if (!file) return;
 
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
-    img.onload = () => {
-      // Redimensionner max 1200px de large pour tenir dans localStorage
+    img.onerror = () => { alert('Photo illisible. Essayez avec une autre photo.'); input.value = ''; };
+    img.onload = async () => {
       const MAX = 1200;
       let w = img.width, h = img.height;
       if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
@@ -1148,14 +1174,18 @@ document.getElementById('ardoiseFile').addEventListener('change', e => {
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       const compressed = canvas.toDataURL('image/jpeg', 0.75);
 
+      setUploadLabel('Envoi en cours…');
       try {
-        const today = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
-        localStorage.setItem(KEY_ARDOISE, JSON.stringify({ date: today, imageUrl: compressed }));
-        renderArdoise();
+        ardoise = await adminCall({ action: 'upload', image: compressed });
+        lsSet(KEY_BUST, String(Date.now()));
+        showArdoise();
         closeAdmin();
         document.querySelector('.menu-tab').click();
       } catch (err) {
-        alert('Photo trop grande. Essayez avec une résolution plus basse.');
+        alert('Envoi impossible : ' + err.message + '. Vérifiez la connexion et réessayez.');
+      } finally {
+        setUploadLabel('Prendre / Choisir une photo');
+        input.value = '';
       }
     };
     img.src = ev.target.result;
@@ -1163,30 +1193,47 @@ document.getElementById('ardoiseFile').addEventListener('change', e => {
   reader.readAsDataURL(file);
 });
 
-function clearArdoise() {
+async function clearArdoise() {
   if (!confirm('Supprimer la photo de l\'ardoise ?')) return;
-  localStorage.removeItem(KEY_ARDOISE);
-  renderArdoise();
-  closeAdmin();
+  try {
+    await adminCall({ action: 'delete' });
+    ardoise = null;
+    lsSet(KEY_BUST, String(Date.now()));
+    showArdoise();
+    closeAdmin();
+  } catch (err) {
+    alert('Suppression impossible : ' + err.message);
+  }
 }
 
-function renderArdoise() {
+async function loadArdoise() {
+  try {
+    const v = lsGet(KEY_BUST);
+    const r = await fetch(API_ARDOISE + (v ? '?v=' + encodeURIComponent(v) : ''));
+    ardoise = r.ok ? await r.json() : null;
+  } catch (e) {
+    ardoise = null;
+  }
+}
+
+function showArdoise() {
   const section = document.getElementById('platdujour');
-  const raw = localStorage.getItem(KEY_ARDOISE);
-  if (!raw) {
+  if (!ardoise || !ardoise.imageUrl) {
     section.innerHTML = `<div class="ardoise-empty"><span class="ae-ico">📋</span>Le plat du jour n'est pas encore disponible.<br>Revenez un peu plus tard ou appelez-nous au <strong>01 47 43 12 35</strong>.</div>`;
     return;
   }
-  const d = JSON.parse(raw);
+  const date = new Date(ardoise.uploadedAt).toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', timeZone:'Europe/Paris' });
   section.innerHTML = `
-    <div class="ardoise-date">📋 Ardoise du ${d.date}</div>
-    <div class="ardoise-photo"><img src="${d.imageUrl}" alt="Ardoise du jour"></div>
+    <div class="ardoise-date">📋 Ardoise du ${date}</div>
+    <div class="ardoise-photo"><img alt="Ardoise du jour"></div>
   `;
+  section.querySelector('img').src = ardoise.imageUrl;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderArdoise();
+document.addEventListener('DOMContentLoaded', async () => {
   updateOpenBadge();
+  await loadArdoise();
+  showArdoise();
   setDefaultTab();
 });
 
@@ -1209,7 +1256,7 @@ function updateOpenBadge() {
 
 /* Onglet par défaut : Plat du Jour si ardoise dispo, sinon À La Carte */
 function setDefaultTab() {
-  const hasArdoise = !!localStorage.getItem(KEY_ARDOISE);
+  const hasArdoise = !!(ardoise && ardoise.imageUrl);
   const defaultId = hasArdoise ? 'platdujour' : 'alacarte';
   document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
