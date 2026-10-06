@@ -67,6 +67,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Action inconnue' });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: 'Erreur serveur' });
+    // Le détail n'est renvoyé qu'à un admin authentifié, pour diagnostiquer.
+    const isAdmin = req.method === 'POST' && req.body && authorized(req.body.password);
+    const detail = isAdmin && err && err.message ? ` (${err.message})` : '';
+    return res.status(500).json({ error: 'Erreur serveur' + detail });
   }
 }
