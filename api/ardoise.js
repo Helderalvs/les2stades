@@ -1,4 +1,4 @@
-import { put, list, del } from '@vercel/blob';
+import { put, list, del, head, BlobNotFoundError } from '@vercel/blob';
 import { createHash, timingSafeEqual } from 'node:crypto';
 
 const PREFIX = 'ardoise/';
@@ -12,19 +12,37 @@ function authorized(password) {
   return timingSafeEqual(sha(password), sha(expected));
 }
 
-async function allBlobs() {
-  const { blobs } = await list({ prefix: PREFIX });
-  return blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+// Chemin fixe : la lecture se fait avec head() (quota "simple", large),
+// list() (quota "avancé", limité) n'est appelé qu'à l'envoi / la suppression.
+const CURRENT = `${PREFIX}current.jpg`;
+
+async function current() {
+  try {
+    return await head(CURRENT);
+  } catch (err) {
+    if (err instanceof BlobNotFoundError) return null;
+    throw err;
+  }
 }
+
+async function removeAll(exceptUrl) {
+  const { blobs } = await list({ prefix: PREFIX });
+  const urls = blobs.map(b => b.url).filter(u => u !== exceptUrl);
+  if (urls.length) await del(urls);
+}
+
+const view = b => ({
+  imageUrl: `${b.url}?v=${new Date(b.uploadedAt).getTime()}`,
+  uploadedAt: b.uploadedAt,
+});
 
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const [latest] = await allBlobs();
-      res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=120');
-      return res.status(200).json(
-        latest ? { imageUrl: latest.url, uploadedAt: latest.uploadedAt } : null
-      );
+      const latest = await current();
+      // 5 min de cache CDN : au pire ~290 lectures/jour, sous le quota gratuit.
+      res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=300');
+      return res.status(200).json(latest ? view(latest) : null);
     }
 
     if (req.method !== 'POST') {
@@ -42,8 +60,7 @@ export default async function handler(req, res) {
     if (body.action === 'login') return res.status(200).json({ ok: true });
 
     if (body.action === 'delete') {
-      const old = await allBlobs();
-      if (old.length) await del(old.map(b => b.url));
+      await removeAll();
       return res.status(200).json({ ok: true });
     }
 
@@ -54,14 +71,15 @@ export default async function handler(req, res) {
       const isJpeg = buf.length > 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
       if (!isJpeg || buf.length > MAX_BYTES) return res.status(400).json({ error: 'Image invalide ou trop lourde' });
 
-      const old = await allBlobs();
-      const blob = await put(`${PREFIX}${Date.now()}.jpg`, buf, {
+      const blob = await put(CURRENT, buf, {
         access: 'public',
         contentType: 'image/jpeg',
-        addRandomSuffix: true,
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        cacheControlMaxAge: 60,
       });
-      if (old.length) await del(old.map(b => b.url));
-      return res.status(200).json({ imageUrl: blob.url, uploadedAt: new Date().toISOString() });
+      await removeAll(blob.url);
+      return res.status(200).json(view({ url: blob.url, uploadedAt: new Date() }));
     }
 
     return res.status(400).json({ error: 'Action inconnue' });
